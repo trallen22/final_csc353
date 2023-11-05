@@ -1,3 +1,4 @@
+-- Tristan Allen, Will Cox, and Daniel Carter 
 DROP SCHEMA IF EXISTS NFLdata; 
 CREATE SCHEMA NFLdata; 
 USE NFLdata; 
@@ -76,20 +77,23 @@ CREATE TABLE pass
     yards_after_catch   INT, 
     qb_hit      INT, 
     pass_location   VARCHAR(10),
-    interceptor VARCHAR(40), 
-    FOREIGN KEY (play_id) REFERENCES play (play_id) 
-    -- FOREIGN KEY (passer_id) REFERENCES player (player_id), -- not every pass has a passer and receiver 
-    -- FOREIGN KEY (receiver_id) REFERENCES player (player_id)
+    interceptor_id INT, 
+    FOREIGN KEY (play_id) REFERENCES play (play_id), 
+    FOREIGN KEY (passer_id) REFERENCES player (player_id), 
+    FOREIGN KEY (receiver_id) REFERENCES player (player_id),
+    FOREIGN KEY (interceptor_id) REFERENCES player (player_id)
     );
 
 CREATE TABLE special_teams
     (play_id    INT,
     punt_result VARCHAR(10),
     return_result   VARCHAR(10), -- !! this includes int/fumble returns !! might need to adjust 
-    returner    VARCHAR(40), -- maybe foriegn key 
-    blocking_player VARCHAR(40), -- maybe foreign key
+    returner_id    INT, 
+    blocking_player_id INT,
     fg_result   VARCHAR(10), 
     fg_distance     INT, 
     extra_point_result VARCHAR(10), 
-    FOREIGN KEY (play_id) REFERENCES play (play_id) 
+    FOREIGN KEY (play_id) REFERENCES play (play_id), 
+    FOREIGN KEY (returner_id) REFERENCES player (player_id), 
+    FOREIGN KEY (blocking_player_id) REFERENCES player (player_id) 
     );
