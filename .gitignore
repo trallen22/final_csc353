@@ -1,0 +1,5 @@
+# ignore the csv
+*.csv
+
+# ignore the test file 
+test.py 
