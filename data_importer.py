@@ -1,9 +1,12 @@
-# Tristan Allen and Will Cox 
+''' 
+authors: Tristan Allen, Will Cox, and Daniel Carter 
 
-from tabnanny import check
+reads data from the NFL Play by Play csv and 
+imports it into a sql database NFLdata 
+'''
+
 import mysql.connector
 from mysql.connector import Error
-import glob
 import csv 
 import os
 import sys
@@ -70,19 +73,21 @@ def playerIDbyName(playerName):
 	# try to get the playerID from the dictionary 
 	try: 
 		curPlayerID = playerIDmap[playerName]
+		nextPlayerIDcounter = playerIDcounter
 	# add the player to the dictionary if they aren't already in it 
 	except KeyError:
 		curPlayerID = playerIDcounter
+		nextPlayerIDcounter = playerIDcounter + 1
 		playerIDmap[playerName] = curPlayerID
 		sqlInsert('player', (curPlayerID, playerName))
-	return curPlayerID, playerIDmap, playerIDcounter+1
+	return curPlayerID, playerIDmap, nextPlayerIDcounter
 
 ################
 # Main execution starts here
 ################
 
 # used for testing, resets the database 
-os.system('mysql NFLdata < "/Users/tristanallen/Desktop/csc 353/final_csc353/NFLschema.sql"')
+os.system(f'mysql NFLdata < "{os.getcwd()}/NFLschema.sql"')
 
 try: 
 	connection = mysql.connector.connect(host=HOST, user=USER, database="NFLdata") 
@@ -182,7 +187,7 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 			sqlInsert('pass', curPassTuple)
 
 		# special_teams table 
-		stPlay = 1 # indicator if st play, sets to false if none are found 
+		stPlay = 1 # indicator if st play; will set to false if none are found 
 		# default values are None since only one st play can occur at a time
 		patResult = None 
 		fgResult = None 
@@ -191,6 +196,7 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 		fgDistance = None
 		returnerID = None
 		# Might want to incorporate 'PlayType'
+		# check what kind of st play 
 		if row['ExPointResult'] != 'NA': 
 			patResult = row['ExPointResult']
 		elif row['FieldGoalResult'] != 'NA': 
@@ -208,7 +214,7 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 			returnResult = row['ReturnResult'] 
 		else: 
 			stPlay = 0 # not a st play so set to false 
-		# fill table if determined as st play 
+		# fill st table if determined as st play 
 		if (stPlay):
 			if row['BlockingPlayer'] != 'NA':
 				blockingPlayerID, playerIDmap, playerIDcounter = playerIDbyName(row['BlockingPlayer'])
@@ -224,9 +230,10 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 							patResult)
 			sqlInsert('special_teams', curStTuple)
 
+		# # used for testing 
+		# if i == 1000:
+		# 	break 
 
-		if i == 1000:
-			break 
 		pbar.update(1)
 
 connection.commit()
