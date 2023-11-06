@@ -22,38 +22,13 @@ playerIDmap = {}
 playerIDcounter = 1
 curPlayID = 0 # this keeps track of play_id from table play 
 
-# generateString: generates a string of "%s, " for sql insert statement 
-# parameters: 
-# 	table - str, name of table to insert values into 
-# returns: str, "%s, %s, ..., %s"
-def generateString(table):
-	attributeLen = 0
-	curStr = ''
-
-	if table == 'game': 
-		attributeLen = 5
-	elif table == 'play':
-		attributeLen = 34
-	elif table == 'player':
-		attributeLen = 2
-	elif table == 'run':
-		attributeLen = 2
-	elif table == 'pass': 
-		attributeLen = 10
-	elif table == 'special_teams':
-		attributeLen = 8
-
-	curStr = "%s, " * attributeLen
-	# removes last comma and space, then returns string 
-	return f"({curStr[:-2]})" 
-
 # sqlInsert: executes a SQL insert statement on a given table
 # parameters: 
 # 	table - str, name of table to insert values into 
 #	curTuple - tuple, tuple of values to insert into table 	
 def sqlInsert(table, curTuple):
-	valueStr = generateString(table)
-	sqlStr = f"INSERT INTO {table} VALUES {valueStr};"
+	curValStr = "%s, " * len(curTuple) # "%s, %s, ..., %s"
+	sqlStr = f"INSERT INTO {table} VALUES ({curValStr[:-2]});"
 	try:
 		cursor.execute(sqlStr, curTuple)
 	except Exception as e:
@@ -97,12 +72,12 @@ except Exception as e:
 
 cursor = connection.cursor()
 
-i = 0
+i = 0 # used for testing 
 with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 	curCsv = csv.DictReader(curFile)
 	pbar = tqdm(desc='GOING PLAY BY PLAY', total=362447) # progress bar to total number of rows in the file 
 	for row in curCsv:
-		i += 1
+		i += 1 # used for testing 
 
 		curPlayID += 1
 
