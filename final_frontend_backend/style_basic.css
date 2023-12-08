@@ -1,0 +1,32 @@
+
+/* [ Box [ Margin [ Border [ Padding [ Content ] Padding ] Border ] Margin ] Box ]
+
+	Margin: Limit around the border
+	Padding: Limit inside the border
+
+	https://www.w3schools.com/Css/css_boxmodel.asp
+*/
+
+body {
+  background-color: rgb(213, 213, 213);
+  margin: 0;
+}
+
+header {
+  background-color: black;
+  color: white;
+}
+
+h2{
+	font-size: 1.5rem;
+}
+
+h3{
+	font-size: 1rem;
+}
+
+.info-column {
+  background-color: rgb(255, 255, 255);
+	border: solid rgb(213, 213, 213) 5px;
+	border-radius: 15px;
+}
