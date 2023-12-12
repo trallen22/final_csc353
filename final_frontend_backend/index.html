@@ -46,12 +46,7 @@
         <!-- First Column Content -->
           <h2>Player Stats</h2>
           <h3>Passing</h3>
-          <ul>
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <ul id="player-passing">
           </ul>
           <h3>Rushing</h3>
           <ul>
@@ -77,7 +72,7 @@
         <!-- Second Column Content -->
           <h2>Team Stats</h2>
           <h3>Passing</h3>
-          <ul>
+          <ul id="team-passer">
             <li id="player-1"></li>
             <li id="player-2"></li>
             <li id="player-3"></li>
@@ -136,7 +131,7 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <script>
     function fetchData() {
-      const responsePromise = fetch("/student", {
+      const responsePromise = ("/player", {
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8"
@@ -149,21 +144,29 @@
           populateList(await response.json())
         },
         (error) => {
-          alert("Cannot obtain students")
+          alert("Cannot obtain player")
         })
     }
 
     function populateList(results) {
-      let list = document.getElementById("myList")
+      if(results.length == 0){
+        console.log('short');
+      }
+      console.log('not short');
+
+      let list = document.getElementById("player-passing")
 
       results.forEach(element => {
-        let student = document.createElement("li")
+        let player = document.createElement("li")
 
-        student.innerText = element.name
+        player.innerText = results[0]
+        console.log(results[0])
 
         list.appendChild(student)
       })
     }
+
+    fetchData();
   </script>
 </body>
 

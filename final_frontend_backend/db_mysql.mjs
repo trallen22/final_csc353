@@ -14,13 +14,17 @@ function connect() {
 	connection.connect();
 }
 
-function queryCallback(callback) {
-	connection.query("SELECT * FROM Student", (error, results, fields) => {
+function queryCallback(queryType, callback) {
+
+	if(queryType == 'playerQuery'){
+		connection.query("CALL playerPassingTotalStats()", (error, results, fields) => {
 		if (error) throw error;
 
 		console.log(results)
 		callback(results);
 	});
+
+	}
 
 	// With parameters:
 	// "... WHERE name = ?", ['Fernanda'], (error ...)

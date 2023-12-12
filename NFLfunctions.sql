@@ -7,20 +7,21 @@ DELIMITER //
 CREATE PROCEDURE showTeamStats(teamName VARCHAR(3)) 
 BEGIN 
     SELECT * FROM play AS TeamStats
-    WHERE pos_team=teamName OR def_team=teamName; 
+    WHERE pos_team=teamName OR def_team=teamName;
 END; 
 // 
-DELIMITER ; 
+DELIMITER ;
 
 CALL showTeamStats('PIT'); 
 
 -- gets table of all passing stats 
-DROP VIEW IF EXISTS passingStats; 
+DROP VIEW IF EXISTS passingStats;
 CREATE VIEW passingStats AS 
-SELECT ps1.play_id, passer_id, pos_team as offense, season, yards_gained, touchdown, two_pt_conv, pass_outcome, reception, interceptor_id 
+SELECT player.player_name as passer, ps1.play_id, passer_id, pos_team as offense, season, yards_gained, touchdown, two_pt_conv, pass_outcome, reception, interceptor_id 
 	FROM pass as ps1
 	JOIN play as play1 on ps1.play_id = play1.play_id 
-	JOIN game as gm1 on play1.game_id = gm1.game_id; 
+	JOIN game as gm1 on play1.game_id = gm1.game_id
+	JOIN player on player.player_id = ps1.passer_id;
 	
 SELECT * FROM passingStats; 
 
@@ -43,19 +44,20 @@ CALL teamPassingTotalStats('PIT');
 -- takes in a player name and returns their total stats 
 DROP PROCEDURE IF EXISTS playerPassingTotalStats;
 DELIMITER //
-CREATE PROCEDURE playerPassingTotalStats(playerName INT, sortKey VARCHAR(15)) 
+CREATE PROCEDURE playerPassingTotalStats() 
 BEGIN
-	SELECT passer_id as player, SUM(yards_gained) as total_yards, SUM(touchdown) as touchdowns, SUM(reception) as completions,
+	SELECT passer, passer_id as player, SUM(yards_gained) as total_yards, SUM(touchdown) as touchdowns, SUM(reception) as completions,
 		COUNT(play_id) AS attempts, (100 * (SUM(reception) / COUNT(play_id))) AS percentage, COUNT(interceptor_id) AS interceptions 
 		FROM passingStats as curPassStats
 		-- WHERE curPassStats.passer_id=playerName
 		GROUP BY player
-		ORDER BY sortKey DESC;
+		ORDER BY total_yards DESC
+		LIMIT 5;
 END;
 //
 DELIMITER ;
 
-CALL playerPassingTotalStats(1,'total_yards');
+CALL playerPassingTotalStats();
 
 -- creates a table for all the passers in each game 
 -- 		returns game_id, passer_id, season 
@@ -70,7 +72,7 @@ SELECT * FROM passerGames;
 
 -- gets the number of games a passes was in for a given season range 
 -- 		returns the number of games a passer was in
-DROP FUNCTION IF EXISTS passerNumGames; 
+DROP FUNCTION IF EXISTS passerNumGames;
 DELIMITER // 
 CREATE FUNCTION passerNumGames(curPlayer INT, startSeason INT, finishSeason INT)
 RETURNS INT 

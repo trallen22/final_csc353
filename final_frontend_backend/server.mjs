@@ -4,7 +4,7 @@
 // Documentation in: https://expressjs.com/en/starter/hello-world.html
 import express from 'express';
 
-import * as db from "./db.mjs";
+import * as db from "./db_mysql.mjs";
 
 var app = express();
 let port = 3001
@@ -15,11 +15,11 @@ db.connect();
 app.use(express.static('.'))
 
 // For GET requests to "/student?field1=value1&field2=value2"
-app.get('/student', function(request, response){
+app.get('/player', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback((results) => {
+    db.queryCallback('playerQuery',(results) => {
         response.json(results)
     })
 });
