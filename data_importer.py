@@ -15,6 +15,7 @@ from tqdm import tqdm
 HOST = 'localhost'
 USER = 'root'
 FILENAME = "NFL Play by Play 2009-2016 (v3).csv"
+PASSWORD = '123456'
 
 # these sets are used to check if values have already been inserted into the table 
 gameSet = set()
@@ -65,7 +66,7 @@ def playerIDbyName(playerName):
 os.system(f'mysql NFLdata < "{os.getcwd()}/NFLschema.sql"')
 
 try: 
-	connection = mysql.connector.connect(host=HOST, user=USER, database="NFLdata") 
+	connection = mysql.connector.connect(host=HOST, user=USER, password=PASSWORD, database="NFLdata") 
 except Exception as e:
 	print(f'error: {e}')
 	sys.exit()
