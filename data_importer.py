@@ -151,7 +151,7 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 				interceptorPlayerID = None 
 			curPassTuple = (curPlayID, 
 							passerPlayerID, 
-							row['PassOutcome'], 
+							1 if row['PassOutcome'] == "completion" else 0, 
 							row['AirYards'], 
 							receiverPlayerID, 
 							row['Reception'], 

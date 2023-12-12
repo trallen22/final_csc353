@@ -70,7 +70,7 @@ CREATE TABLE run
 CREATE TABLE pass 
     (play_id    INT, 
     passer_id   INT, 
-    pass_outcome    VARCHAR(20), 
+    pass_outcome    INT, -- complete/incomplete 
     air_yards   INT, 
     receiver_id  INT, 
     reception   INT, 
