@@ -44,25 +44,30 @@
       <div class="col-md-4 info-column">
         <div class="col-md-12">
         <!-- First Column Content -->
-          <h2>Player Stats</h2>
+          <h2>Player Stats 2009-2017</h2>
           <h3>Passing</h3>
           <ul id="player-passing">
+            <li id="player-1-passing"></li>
+            <li id="player-2-passing"></li>
+            <li id="player-3-passing"></li>
+            <li id="player-4-passing"></li>
+            <li id="player-5-passing"></li>
           </ul>
           <h3>Rushing</h3>
-          <ul>
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <ul id="player-rushing">
+            <li id="player-1-rushing"></li>
+            <li id="player-2-rushing"></li>
+            <li id="player-3-rushing"></li>
+            <li id="player-4-rushing"></li>
+            <li id="player-5-rushing"></li>
           </ul>
           <h3>Receiving</h3>
-          <ul>
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <ul id="player-rec">
+            <li id="player-1-rec"></li>
+            <li id="player-2-rec"></li>
+            <li id="player-3-rec"></li>
+            <li id="player-4-rec"></li>
+            <li id="player-5-rec"></li>
           </ul>
         </div>
       </div>
@@ -70,57 +75,59 @@
         <div class="col-md-12">
         
         <!-- Second Column Content -->
-          <h2>Team Stats</h2>
+          <h2>Team Stats 2009-2017</h2>
           <h3>Passing</h3>
-          <ul id="team-passer">
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <ul id="team-passing">
+            <li id="team-1-pass"></li>
+            <li id="team-2-pass"></li>
+            <li id="team-3-pass"></li>
+            <li id="team-4-pass"></li>
+            <li id="team-5-pass"></li>
           </ul>
           <h3>Rushing</h3>
-          <ul>
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <ul id="team-rush">
+            <li id="team-1-rush"></li>
+            <li id="team-2-rush"></li>
+            <li id="team-3-rush"></li>
+            <li id="team-4-rush"></li>
+            <li id="team-5-rush"></li>
           </ul>
           <h3>Receiving</h3>
-          <ul>
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <ul id="team-rec">
+            <li id="team-1-rec"></li>
+            <li id="team-2-rec"></li>
+            <li id="team-3-rec"></li>
+            <li id="team-4-rec"></li>
+            <li id="team-5-rec"></li>
           </ul>
         </div>
       </div>
       <div class="col-md-4 info-column">
         <div class="col-md-12">
         <!-- Third Column Content -->
-          <h2>Spotlight</h2>
-          <ul title="Passing">
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <h2>Random Spotlight</h2>
+          <h3>Passer</h3>
+          <ul id="random-pass">
+            <li id="name-pass"></li>
+            <li id="stat-1-pass"></li>
+            <li id="stat-2-pass"></li>
+            <li id="stat-3-pass"></li>
+            <li id="stat-4-pass"></li>
           </ul>
-          <ul title="Rushing">
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <h3>Rusher</h3>
+          <ul id="random-rush">
+            <li id="name-rush"></li>
+            <li id="stat-1-rush"></li>
+            <li id="stat-2-rush"></li>
+            <li id="stat-3-rush"></li>
           </ul>
-          <ul title="Receiving">
-            <li id="player-1"></li>
-            <li id="player-2"></li>
-            <li id="player-3"></li>
-            <li id="player-4"></li>
-            <li id="player-5"></li>
+          <h3>Receiver</h3>
+          <ul id="random-rec">
+            <li id="name-rec"></li>
+            <li id="stat-1-rec"></li>
+            <li id="stat-2-rec"></li>
+            <li id="stat-3-rec"></li>
+            <li id="stat-4-rec"></li>
           </ul>
         </div>
       </div>
@@ -130,43 +137,299 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <script>
-    function fetchData() {
-      const responsePromise = ("/player", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-      });
-
-      responsePromise.then(
+    function fetchData(query) {
+      if(query == 'playerPass'){
+        const responsePromise = fetch("/player_pass", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
         // Fulfilled
         async (response) => {
-          populateList(await response.json())
+          populateList(await response.json(), 'playerPass')
         },
         (error) => {
           alert("Cannot obtain player")
         })
-    }
 
-    function populateList(results) {
-      if(results.length == 0){
-        console.log('short');
+      }else if(query == 'playerRush'){
+        const responsePromise = fetch("/player_rush", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'playerRush')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+      }else if(query == 'playerRec'){
+        const responsePromise = fetch("/player_rec", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'playerRec')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+      }else if(query == 'teamPass'){
+        const responsePromise = fetch("/team_pass", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'teamPass')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+
+      }else if(query == 'teamRush'){
+        const responsePromise = fetch("/team_rush", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'teamRush')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+      }else if(query == 'teamRec'){
+        const responsePromise = fetch("/team_rec", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'teamRec')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+      }else if(query == 'randPass'){
+        const responsePromise = fetch("/rand_pass", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'randPass')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+      }else if(query == 'randRush'){
+        const responsePromise = fetch("/rand_rush", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'randRush')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
+      }else if(query == 'randRec'){
+        const responsePromise = fetch("/rand_rec", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        responsePromise.then(
+        // Fulfilled
+        async (response) => {
+          populateList(await response.json(), 'randRec')
+        },
+        (error) => {
+          alert("Cannot obtain player")
+        })
       }
-      console.log('not short');
+      
 
-      let list = document.getElementById("player-passing")
 
-      results.forEach(element => {
-        let player = document.createElement("li")
-
-        player.innerText = results[0]
-        console.log(results[0])
-
-        list.appendChild(student)
-      })
     }
 
-    fetchData();
+    function populateList(results, play_type) {
+      if(play_type == 'playerPass'){
+        let list = document.getElementById("player-passing")
+        let passing1 = document.getElementById("player-1-passing")
+        let passing2 = document.getElementById("player-2-passing")
+        let passing3 = document.getElementById("player-3-passing")
+        let passing4 = document.getElementById("player-4-passing")
+        let passing5 = document.getElementById("player-5-passing")
+
+        passing1.innerText = results[0][0]['passer'] + ': ' + results[0][0]['total_yards'] + ' Total Yards & ' + results[0][0]['touchdowns'] + ' TDs'
+        passing2.innerText = results[0][1]['passer'] + ': ' + results[0][1]['total_yards'] + ' Total Yards & ' + results[0][1]['touchdowns'] + ' TDs'
+        passing3.innerText = results[0][2]['passer'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][2]['touchdowns'] + ' TDs'
+        passing4.innerText = results[0][3]['passer'] + ': ' + results[0][3]['total_yards'] + ' Total Yards & ' + results[0][3]['touchdowns'] + ' TDs'
+        passing5.innerText = results[0][4]['passer'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
+      }else if(play_type == 'playerRush'){
+
+        let list = document.getElementById("player-rushing")
+        let rushing1 = document.getElementById("player-1-rushing")
+        let rushing2 = document.getElementById("player-2-rushing")
+        let rushing3 = document.getElementById("player-3-rushing")
+        let rushing4 = document.getElementById("player-4-rushing")
+        let rushing5 = document.getElementById("player-5-rushing")
+ 
+        rushing1.innerText = results[0][0]['rusher'] + ': ' + results[0][0]['total_yards'] + ' Total Yards & ' + results[0][0]['touchdowns'] + ' TDs'
+        rushing2.innerText = results[0][1]['rusher'] + ': ' + results[0][1]['total_yards'] + ' Total Yards & ' + results[0][1]['touchdowns'] + ' TDs'
+        rushing3.innerText = results[0][2]['rusher'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][2]['touchdowns'] + ' TDs'
+        rushing4.innerText = results[0][3]['rusher'] + ': ' + results[0][3]['total_yards'] + ' Total Yards & ' + results[0][3]['touchdowns'] + ' TDs'
+        rushing5.innerText = results[0][4]['rusher'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
+      }else if(play_type == 'playerRec'){
+
+        let list = document.getElementById("player-rec")
+        let wr1 = document.getElementById("player-1-rec")
+        let wr2 = document.getElementById("player-2-rec")
+        let wr3 = document.getElementById("player-3-rec")
+        let wr4 = document.getElementById("player-4-rec")
+        let wr5 = document.getElementById("player-5-rec")
+
+        wr1.innerText = results[0][0]['WR'] + ': ' + results[0][0]['total_yards'] + ' Total Yards & ' + results[0][0]['touchdowns'] + ' TDs'
+        wr2.innerText = results[0][1]['WR'] + ': ' + results[0][1]['total_yards'] + ' Total Yards & ' + results[0][1]['touchdowns'] + ' TDs'
+        wr3.innerText = results[0][2]['WR'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][2]['touchdowns'] + ' TDs'
+        wr4.innerText = results[0][3]['WR'] + ': ' + results[0][3]['total_yards'] + ' Total Yards & ' + results[0][3]['touchdowns'] + ' TDs'
+        wr5.innerText = results[0][4]['WR'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
+      }else if(play_type == 'teamPass'){
+
+        let list = document.getElementById("team-passing")
+        let tpass1 = document.getElementById("team-1-pass")
+        let tpass2 = document.getElementById("team-2-pass")
+        let tpass3 = document.getElementById("team-3-pass")
+        let tpass4 = document.getElementById("team-4-pass")
+        let tpass5 = document.getElementById("team-5-pass")
+
+        tpass1.innerText = results[0][0]['team'] + ': ' + results[0][0]['total_yards'] + ' Total Yards & ' + results[0][0]['touchdowns'] + ' TDs'
+        tpass2.innerText = results[0][1]['team'] + ': ' + results[0][1]['total_yards'] + ' Total Yards & ' + results[0][1]['touchdowns'] + ' TDs'
+        tpass3.innerText = results[0][2]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][2]['touchdowns'] + ' TDs'
+        tpass4.innerText = results[0][3]['team'] + ': ' + results[0][3]['total_yards'] + ' Total Yards & ' + results[0][3]['touchdowns'] + ' TDs'
+        tpass5.innerText = results[0][4]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
+      }else if(play_type == 'teamRush'){
+
+        let list = document.getElementById("team-rush")
+        let trush1 = document.getElementById("team-1-rush")
+        let trush2 = document.getElementById("team-2-rush")
+        let trush3 = document.getElementById("team-3-rush")
+        let trush4 = document.getElementById("team-4-rush")
+        let trush5 = document.getElementById("team-5-rush")
+
+        trush1.innerText = results[0][0]['team'] + ': ' + results[0][0]['total_yards'] + ' Total Yards & ' + results[0][0]['touchdowns'] + ' TDs'
+        trush2.innerText = results[0][1]['team'] + ': ' + results[0][1]['total_yards'] + ' Total Yards & ' + results[0][1]['touchdowns'] + ' TDs'
+        trush3.innerText = results[0][2]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][2]['touchdowns'] + ' TDs'
+        trush4.innerText = results[0][3]['team'] + ': ' + results[0][3]['total_yards'] + ' Total Yards & ' + results[0][3]['touchdowns'] + ' TDs'
+        trush5.innerText = results[0][4]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
+      }else if(play_type == 'teamRec'){
+
+        let list = document.getElementById("team-rush")
+        let trec1 = document.getElementById("team-1-rec")
+        let trec2 = document.getElementById("team-2-rec")
+        let trec3 = document.getElementById("team-3-rec")
+        let trec4 = document.getElementById("team-4-rec")
+        let trec5 = document.getElementById("team-5-rec")
+
+        trec1.innerText = results[0][0]['team'] + ': ' + results[0][0]['total_yards'] + ' Total Yards & ' + results[0][0]['touchdowns'] + ' TDs'
+        trec2.innerText = results[0][1]['team'] + ': ' + results[0][1]['total_yards'] + ' Total Yards & ' + results[0][1]['touchdowns'] + ' TDs'
+        trec3.innerText = results[0][2]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][2]['touchdowns'] + ' TDs'
+        trec4.innerText = results[0][3]['team'] + ': ' + results[0][3]['total_yards'] + ' Total Yards & ' + results[0][3]['touchdowns'] + ' TDs'
+        trec5.innerText = results[0][4]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
+      }else if(play_type == 'randPass'){
+
+        let list = document.getElementById("random-pass")
+        let randPass1 = document.getElementById("name-pass")
+        let randPass2 = document.getElementById("stat-1-pass")
+        let randPass3 = document.getElementById("stat-2-pass")
+        let randPass4 = document.getElementById("stat-3-pass")
+        let randPass5 = document.getElementById("stat-4-pass")
+
+        randPass1.innerText = results[0][0]['passer']
+        randPass2.innerText = 'Attempts: ' +  results[0][0]['attempts']
+        randPass3.innerText = 'Yards: ' +  results[0][0]['total_yards']
+        randPass4.innerText = 'TDs: ' +  results[0][0]['touchdowns']
+        randPass5.innerText = 'INTs: ' +  results[0][0]['interceptions']
+
+      }else if(play_type == 'randRush'){
+
+        let list = document.getElementById("random-rush")
+        let randRush1 = document.getElementById("name-rush")
+        let randRush2 = document.getElementById("stat-1-rush")
+        let randRush3 = document.getElementById("stat-2-rush")
+        let randRush4 = document.getElementById("stat-3-rush")
+
+        randRush1.innerText = results[0][0]['rusher']
+        randRush2.innerText = 'Attempts: ' +  results[0][0]['attempts']
+        randRush3.innerText = 'Yards: ' +  results[0][0]['total_yards']
+        randRush4.innerText = 'TDs: ' +  results[0][0]['touchdowns']
+        
+      }else if(play_type == 'randRec'){
+        let list = document.getElementById("random-rec")
+        let randRec1 = document.getElementById("name-rec")
+        let randRec2 = document.getElementById("stat-1-rec")
+        let randRec3 = document.getElementById("stat-2-rec")
+        let randRec4 = document.getElementById("stat-3-rec")
+        let randRec5 = document.getElementById("stat-4-rec")
+
+        randRec1.innerText = results[0][0]['WR']
+        randRec2.innerText = 'Receptions: ' + results[0][0]['receptions']
+        randRec3.innerText = 'Targets: ' +  results[0][0]['targets']
+        randRec4.innerText = 'Yards: ' + results[0][0]['total_yards']
+        randRec5.innerText = 'TDs: ' + results[0][0]['touchdowns']
+        }
+
+
+
+
+      // results.forEach(element => {
+      //   let player = document.createElement("li")
+
+      //   player.innerText = results[0]
+      //   console.log(results[0])
+
+      //   list.appendChild(student)
+      // })
+    }
+
+    fetchData('playerPass')
+    fetchData('playerRush')
+    fetchData('playerRec')
+    fetchData('teamPass')
+    fetchData('teamRush')
+    fetchData('teamRec')
+    fetchData('randPass')
+    fetchData('randRush')
+    fetchData('randRec')
   </script>
 </body>
 

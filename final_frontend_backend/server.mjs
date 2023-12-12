@@ -15,11 +15,83 @@ db.connect();
 app.use(express.static('.'))
 
 // For GET requests to "/student?field1=value1&field2=value2"
-app.get('/player', function(request, response){
+app.get('/player_pass', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('playerQuery',(results) => {
+    db.queryCallback('playerPassQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/player_rush', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('playerRushQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/player_rec', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('playerRecQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/team_pass', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('teamPassQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/team_rush', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('teamRushQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/team_rec', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('teamRecQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/rand_pass', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('randPassQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/rand_rush', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+
+    db.queryCallback('randRushQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/rand_rec', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+    console.log('here server')
+    db.queryCallback('randRecQuery',(results) => {
         response.json(results)
     })
 });
