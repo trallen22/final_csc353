@@ -19,7 +19,7 @@ app.get('/player_pass', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('playerPassQuery',(results) => {
+    db.queryCallback("",'playerPassQuery',(results) => {
         response.json(results)
     })
 });
@@ -28,7 +28,7 @@ app.get('/player_rush', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('playerRushQuery',(results) => {
+    db.queryCallback("",'playerRushQuery',(results) => {
         response.json(results)
     })
 });
@@ -37,7 +37,7 @@ app.get('/player_rec', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('playerRecQuery',(results) => {
+    db.queryCallback("",'playerRecQuery',(results) => {
         response.json(results)
     })
 });
@@ -46,7 +46,7 @@ app.get('/team_pass', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('teamPassQuery',(results) => {
+    db.queryCallback("",'teamPassQuery',(results) => {
         response.json(results)
     })
 });
@@ -55,7 +55,7 @@ app.get('/team_rush', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('teamRushQuery',(results) => {
+    db.queryCallback("",'teamRushQuery',(results) => {
         response.json(results)
     })
 });
@@ -64,7 +64,7 @@ app.get('/team_rec', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('teamRecQuery',(results) => {
+    db.queryCallback("",'teamRecQuery',(results) => {
         response.json(results)
     })
 });
@@ -73,7 +73,7 @@ app.get('/rand_pass', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('randPassQuery',(results) => {
+    db.queryCallback("",'randPassQuery',(results) => {
         response.json(results)
     })
 });
@@ -82,7 +82,7 @@ app.get('/rand_rush', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
 
-    db.queryCallback('randRushQuery',(results) => {
+    db.queryCallback("",'randRushQuery',(results) => {
         response.json(results)
     })
 });
@@ -90,8 +90,21 @@ app.get('/rand_rush', function(request, response){
 app.get('/rand_rec', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
-    console.log('here server')
-    db.queryCallback('randRecQuery',(results) => {
+    db.queryCallback("",'randRecQuery',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/player_table', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+    console.log('we got here')
+    let queryParams = []
+    let category = request.query["category"] 
+    let year = request.query["year"]
+    queryParams.push(year)
+    queryParams.push(category)
+    db.queryCallback(queryParams, 'playerTable',(results) => {
         response.json(results)
     })
 });

@@ -40,6 +40,58 @@ SELECT player.player_name as WR, pass.play_id, receiver_id, pos_team as offense,
 	JOIN game as gm1 on play1.game_id = gm1.game_id
 	JOIN player on player.player_id = pass.receiver_id;
 
+DROP VIEW IF EXISTS combinedStats;
+CREATE VIEW combinedStats AS 
+
+-- Passing Statistics
+SELECT 
+    player.player_name as player_name,
+    ps1.play_id,
+    passer_id as player_id,
+    pos_team as offense,
+    season,
+    yards_gained,
+    touchdown,
+    two_pt_conv,
+    pass_outcome as outcome,
+    reception,
+    interceptor_id 
+FROM pass as ps1
+JOIN play as play1 ON ps1.play_id = play1.play_id 
+JOIN game as gm1 ON play1.game_id = gm1.game_id
+JOIN player ON player.player_id = ps1.passer_id
+
+UNION ALL
+
+-- Rushing Statistics
+SELECT player.player_name as player_name, run.play_id, rusher_id as player_id, pos_team as offense, season, 
+	yards_gained, touchdown, two_pt_conv, NULL as outcome, NULL as reception, NULL as interceptor_id 
+FROM run
+JOIN play as play2 ON run.play_id = play2.play_id 
+JOIN game as gm2 ON play2.game_id = gm2.game_id
+JOIN player ON player.player_id = run.rusher_id
+
+UNION ALL
+
+-- Receiving Statistics
+SELECT 
+    player.player_name as player_name,
+    pass.play_id,
+    receiver_id as player_id,
+    pos_team as offense,
+    season,
+    yards_gained,
+    touchdown,
+    two_pt_conv,
+    NULL as outcome,
+    reception,
+    NULL as interceptor_id 
+FROM pass
+JOIN play as play3 ON pass.play_id = play3.play_id 
+JOIN game as gm3 ON play3.game_id = gm3.game_id
+JOIN player ON player.player_id = pass.receiver_id;
+
+
 
 
 -- takes in a team name and returns their total stats 
@@ -215,6 +267,31 @@ BEGIN
 		ORDER BY RAND()
 		LIMIT 1;
 END;
+//
+DELIMITER ;
+
+DROP VIEW IF EXISTS totalPlayerStats;
+CREATE VIEW totalPlayerStats AS 
+
+SELECT player_name, SUM(yards_gained) AS total_yards, SUM(touchdown) AS TDs, COUNT(interceptor_id) AS INTs, SUM(reception) AS receptions
+	FROM (combinedStats)
+	GROUP BY player_name;
+
+
+
+DROP PROCEDURE IF EXISTS filterPlayerStats;
+DELIMITER //
+CREATE PROCEDURE filterPlayerStats(season_year INT, category VARCHAR(15))
+BEGIN
+	SELECT player_name, SUM(yards_gained) AS total_yards, 
+	SUM(touchdown) AS TDs, COUNT(interceptor_id) AS INTs, SUM(reception) AS receptions
+		FROM (SELECT * 
+				FROM combinedStats
+				WHERE season = season_year) as filtered_stats
+		GROUP BY player_name
+		ORDER BY category DESC;
+	
+END
 //
 DELIMITER ;
 

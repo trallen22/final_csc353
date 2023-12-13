@@ -25,18 +25,13 @@ h3{
 	font-size: 1rem;
 }
 
-.table{
+table{
 	background-color: white;
 }
 
 #div1{
 	background-color: white;
 	height: 50px;
-}
-
-.table-input{
-	margin-right: 10%;
-	padding: 2px;
 }
 
 .info-column {
