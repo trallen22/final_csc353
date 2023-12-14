@@ -21,11 +21,39 @@ function queryCallback(queryParams, queryType, callback) {
 		console.log('here')
 
 		if(queryType == 'playerTable'){
-			connection.query('CALL filterPlayerStats(?, ?, ?)', [queryParams[0], queryParams[1], queryParams[2]], (error, results, fields) => {
-			if (error) throw error;
+			if(queryParams[0] == 'Career'){
 
-			callback(results);
-		});
+				connection.query('CALL filterPlayerStatsCareer(?, ?)', [queryParams[1], queryParams[2]], (error, results, fields) => {
+					if (error) throw error;
+
+					callback(results);
+				});
+
+			}else{
+				connection.query('CALL filterPlayerStats(?, ?, ?)', [queryParams[0], queryParams[1], queryParams[2]], (error, results, fields) => {
+					if (error) throw error;
+
+					callback(results);
+				});
+			}
+
+		}if(queryType == 'teamTable'){
+			console.log('hello', queryParams[0])
+			if(!(queryParams[0] == 'Total')){
+				console.log('total query')
+				connection.query('CALL filterTeamStats(?, ?, ?)', [queryParams[0], queryParams[1], queryParams[2]], (error, results, fields) => {
+					if (error) throw error;
+	
+					callback(results);
+					});
+
+			}else{
+				connection.query('CALL filterTeamStatsTotal(?, ?)', [queryParams[1], queryParams[2]], (error, results, fields) => {
+				if (error) throw error;
+
+				callback(results);
+				});
+			}
 
 		}
 
@@ -98,6 +126,7 @@ function queryCallback(queryParams, queryType, callback) {
 		// "... WHERE name = ?", ['Fernanda'], (error ...)
 	}
 }
+
 
 function disconnect() {
 	connection.end();

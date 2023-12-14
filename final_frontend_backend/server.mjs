@@ -18,7 +18,7 @@ app.use(express.static('.'))
 app.get('/player_pass', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
-
+    console.log('here')
     db.queryCallback("",'playerPassQuery',(results) => {
         response.json(results)
     })
@@ -107,6 +107,22 @@ app.get('/player_table', function(request, response){
     queryParams.push(category)
     queryParams.push(way)
     db.queryCallback(queryParams, 'playerTable',(results) => {
+        response.json(results)
+    })
+});
+
+app.get('/team_table', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+    console.log('we got here')
+    let queryParams = []
+    let category = request.query["category"] 
+    let year = request.query["year"]
+    let way = request.query["way"]
+    queryParams.push(year)
+    queryParams.push(category)
+    queryParams.push(way)
+    db.queryCallback(queryParams, 'teamTable',(results) => {
         response.json(results)
     })
 });

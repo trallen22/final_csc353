@@ -320,3 +320,70 @@ END
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS filterTeamStats;
+DELIMITER //
+CREATE PROCEDURE filterTeamStats(season_year INT, order_column VARCHAR(20), sort_way VARCHAR(10))
+BEGIN
+    SET @query = CONCAT('
+		SELECT offense AS team, 
+			   SUM(yards_gained) AS total_yards,
+			   SUM(touchdown) AS TDs, 
+			   COUNT(reception) AS completions, 
+			   COUNT(interceptor_id) AS INTs
+		FROM combinedStats
+		WHERE season = ', season_year, '
+		GROUP BY team
+		ORDER BY ', order_column, ' ', sort_way);
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END
+//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS filterTeamStatsTotal;
+DELIMITER //
+CREATE PROCEDURE filterTeamStatsTotal(order_column VARCHAR(20), sort_way VARCHAR(10))
+BEGIN
+    SET @query = CONCAT('
+		SELECT offense AS team, 
+			   SUM(yards_gained) AS total_yards,
+			   SUM(touchdown) AS TDs, 
+			   COUNT(reception) AS completions, 
+			   COUNT(interceptor_id) AS INTs
+		FROM combinedStats
+		GROUP BY team
+		ORDER BY ', order_column, ' ', sort_way);
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END
+//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS filterPlayerStatsCareer;
+DELIMITER //
+CREATE PROCEDURE filterPlayerStatsCareer(order_column VARCHAR(20), sort_way VARCHAR(10))
+BEGIN
+    SET @query = CONCAT('
+        SELECT player_name, 
+               SUM(yards_gained) AS total_yards, 
+               SUM(touchdown) AS TDs, 
+               COUNT(interceptor_id) AS INTs, 
+               SUM(reception) AS receptions
+        FROM (
+            SELECT * 
+            FROM combinedStats) AS filtered_stats
+        GROUP BY player_name
+        ORDER BY ', order_column, ' ', sort_way);
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END
+//
+DELIMITER ;
+
