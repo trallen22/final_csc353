@@ -55,7 +55,8 @@ SELECT
     two_pt_conv,
     pass_outcome as outcome,
     reception,
-    interceptor_id 
+    interceptor_id,
+    rec_fumble
 FROM pass as ps1
 JOIN play as play1 ON ps1.play_id = play1.play_id 
 JOIN game as gm1 ON play1.game_id = gm1.game_id
@@ -65,7 +66,7 @@ UNION ALL
 
 -- Rushing Statistics
 SELECT player.player_name as player_name, run.play_id, rusher_id as player_id, pos_team as offense, season, 
-	yards_gained, touchdown, two_pt_conv, NULL as outcome, NULL as reception, NULL as interceptor_id 
+	yards_gained, touchdown, two_pt_conv, NULL as outcome, NULL as reception, NULL as interceptor_id, rec_fumble
 FROM run
 JOIN play as play2 ON run.play_id = play2.play_id 
 JOIN game as gm2 ON play2.game_id = gm2.game_id
@@ -85,7 +86,8 @@ SELECT
     two_pt_conv,
     NULL as outcome,
     reception,
-    NULL as interceptor_id 
+    NULL as interceptor_id,
+    rec_fumble
 FROM pass
 JOIN play as play3 ON pass.play_id = play3.play_id 
 JOIN game as gm3 ON play3.game_id = gm3.game_id
@@ -386,4 +388,28 @@ BEGIN
 END
 //
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS searchPlayerStats;
+DELIMITER //
+CREATE PROCEDURE searchPlayerStats(search_player_1 VARCHAR(20), search_player_2 VARCHAR(20))
+BEGIN
+    SET @query = CONCAT('
+        SELECT player_name,
+			   SUM(yards_gained) AS total_yards, 
+               SUM(touchdown) AS TDs, 
+               COUNT(reception) AS receptions, 
+               (COUNT(interceptor_id) + SUM(rec_fumble)) AS turnovers
+        FROM combinedStats
+        WHERE player_name = ''', search_player_1, ''' OR player_name = ''', search_player_2, '''
+		GROUP BY player_name');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END
+//
+DELIMITER ;
+
+
 

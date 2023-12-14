@@ -127,6 +127,22 @@ app.get('/team_table', function(request, response){
     })
 });
 
+app.get('/search', function(request, response){
+    // If we have fields available
+    // console.log(request.query["field1"]);
+    console.log('we got here')
+    let queryParams = []
+    let player1 = request.query["player1"] 
+    let player2 = request.query["player2"]
+    console.log(player1)
+    console.log(player2)
+    queryParams.push(player2)
+    queryParams.push(player1)
+    db.queryCallback(queryParams, 'search',(results) => {
+        response.json(results)
+    })
+});
+
 app.listen(port, () => console.log('Server is starting on PORT,', port))
 
 process.on('exit', () => {

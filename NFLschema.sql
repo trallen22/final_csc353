@@ -42,7 +42,8 @@ CREATE TABLE play
     play_type       VARCHAR(20), 
     tackler_1       VARCHAR(40), -- maybe foreign key 
     tackler_2       VARCHAR(40), -- maybe foreign key 
-    rec_fumble_team VARCHAR(3), 
+    rec_fumble_team VARCHAR(3),
+    rec_fumble INT,
     rec_fumble_player   VARCHAR(40), -- maybe foreign key 
     sack        INT, 
     accepted_penalty    INT, 

@@ -37,7 +37,7 @@ function queryCallback(queryParams, queryType, callback) {
 				});
 			}
 
-		}if(queryType == 'teamTable'){
+		}else if(queryType == 'teamTable'){
 			console.log('hello', queryParams[0])
 			if(!(queryParams[0] == 'Total')){
 				console.log('total query')
@@ -54,6 +54,16 @@ function queryCallback(queryParams, queryType, callback) {
 				callback(results);
 				});
 			}
+
+		}else if(queryType == 'search'){
+
+			console.log(queryParams)
+			
+			connection.query('CALL searchPlayerStats(?, ?)', [queryParams[1], queryParams[0]], (error, results, fields) => {
+				if (error) throw error;
+
+				callback(results);
+				});
 
 		}
 

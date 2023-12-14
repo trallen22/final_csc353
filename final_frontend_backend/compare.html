@@ -41,22 +41,40 @@
 
   <div class="container mt-4">
     <div class="row">
-      <div class="col-md-6 info-column">
+      <div class="col-md-6">
+        <label for="player-1-input" >Player 1:</label>
+        <input type="text" id="player-1-input" placeholder="Enter Player Name" required class="text-center" required>
+      </div>
+      <div class="col-md-6">
+        <label for="player-2-input" >Player 2:</label>
+        <input type="text" id="player-2-input" placeholder="Enter Player Name" required class="text-center" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 mt-3 mb-3">
+        <button id="btn" onclick="fetchData()">Search</button>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6 mb-2 pl-1 pr-1 info-column text-center">
         <!-- First Column Content -->
-          <h2 id="player-name-1"></h2>
-          <ul title="stats-1">
-            <li id="tds-1"></li>
-            <li id="yards-1"></li>
-          </ul>
+          <h1 id="player-name-1"></h1>
+          <h2 id="total-yards-1"></h2>
+          <h2 id="tds-1"></h2>
+          <h2 id="receptions-1"></h2>
+          <h2 id="ints-1"></h2>
         <!-- </div> -->
       </div>
-      <div class="col-md-6 info-column">
+      <div class="col-md-6 mb-2 pl-1 pr-1 info-column text-center">
         <!-- Second Column Content -->
-        <h2 id="player-name-2"></h2>
-        <ul title="stats-2">
-          <li id="tds-2"></li>
-          <li id="yards-2"></li>
-        </ul>
+        <h1 id="player-name-2"></h1>
+        <h2 id="total-yards-2"></h2>
+        <h2 id="tds-2"></h2>
+        <h2 id="receptions-2"></h2>
+        <h2 id="ints-2"></h2>
 
       </div>
     </div>
@@ -65,8 +83,16 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <script>
+
     function fetchData() {
-      const responsePromise = fetch("/student", {
+
+      var player1 = document.getElementById('player-1-input').value
+      var player2 = document.getElementById('player-2-input').value
+
+      console.log(player1, 'input')
+      console.log(player2, 'input')
+
+      const responsePromise = fetch("/search?player1=" + player1 +'&player2=' + player2, {
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8"
@@ -84,16 +110,52 @@
     }
 
     function populateList(results) {
-      let list = document.getElementById("myList")
+      let player_1 = document.getElementById('player-name-1');
+      let yards_1 = document.getElementById('total-yards-1');
+      let tds_1 = document.getElementById('tds-1');
+      let receptions_1 = document.getElementById('receptions-1');
+      let ints_1 = document.getElementById('ints-1');
 
-      results.forEach(element => {
-        let student = document.createElement("li")
+      let player_2 = document.getElementById('player-name-2');
+      let yards_2 = document.getElementById('total-yards-2');
+      let tds_2 = document.getElementById('tds-2');
+      let receptions_2 = document.getElementById('receptions-2');
+      let ints_2 = document.getElementById('ints-2');
 
-        student.innerText = element.name
+      // Function to set background color based on comparison
+      const setColor = (value1, value2, element) => {
+        if (value1 > value2) {
+          element.style.color = 'green';
+        } else if (value1 < value2) {
+          element.style.color = 'red';
+        } else {
+          element.style.color = 'black';
+        }
+      };
+      console.log(results)
+      player_2.innerHTML = results[0][0].player_name;
+      yards_2.innerHTML = 'Yards: ' + results[0][0].total_yards;
+      tds_2.innerHTML = 'TDs: ' + results[0][0].TDs;
+      receptions_2.innerHTML = 'Completions: ' + results[0][0].receptions;
+      ints_2.innerHTML = 'Turnovers: ' + results[0][0].turnovers;
 
-        list.appendChild(student)
-      })
+      player_1.innerHTML = results[0][1].player_name;
+      yards_1.innerHTML = 'Yards: ' + results[0][1].total_yards;
+      tds_1.innerHTML = 'TDs: ' + results[0][1].TDs;
+      receptions_1.innerHTML ='Completions: ' + results[0][1].receptions;
+      ints_1.innerHTML = 'Turnovers: ' + results[0][1].turnovers;
+
+      // Compare and set background color
+      setColor(results[0][0].total_yards, results[0][1].total_yards, yards_2);
+      setColor(results[0][0].TDs, results[0][1].TDs, tds_2);
+      setColor(results[0][0].receptions, results[0][1].receptions, receptions_2);
+      setColor(results[0][1].interceptor, results[0][0].interceptor, ints_2);
+      setColor(results[0][1].total_yards, results[0][0].total_yards, yards_1);
+      setColor(results[0][1].TDs, results[0][0].TDs, tds_1);
+      setColor(results[0][1].receptions, results[0][0].receptions, receptions_1);
+      setColor(results[0][0].turnovers, results[0][1].turnovers, ints_1);
     }
+
   </script>
 </body>
 
