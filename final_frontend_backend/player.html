@@ -43,6 +43,13 @@
     <row class="row d flex">
       <div class="col-12">
         <label for="cars">Filter By:</label>
+        <select id="category" name="category">
+          <option value="player_name">Name</option>
+          <option value="total_yards">Yards</option>
+          <option value="tds">Touchdowns</option>
+          <option value="ints">Interceptions</option>
+          <option value="receptions">Completions</option>
+        </select>
         <select id="year" name="year">
           <option value="career">Career</option>
           <option value="09">2009</option>
@@ -53,6 +60,10 @@
           <option value="14">2014</option>
           <option value="15">2015</option>
           <option value="16">2016</option>
+        </select>
+        <select id="way" name="filter_way">
+          <option value="ASC">Ascending</option>
+          <option value="DESC">Descending</option>
         </select>
         <button class="btn-light" onclick="filterData()">Sort</button>
       </div>
@@ -91,7 +102,6 @@
 
 
   function sortTable(n) {
-    console.log('here')
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("myTable");
     switching = true;
@@ -178,20 +188,25 @@
 
     function filterData(){
 
+      var category = document.getElementById("category");
+      var catValue = category.value;
+
+      var ascDesc = document.getElementById("way");
+      var ascDescValue = ascDesc.value;
 
       var year = document.getElementById("year");
       var yearValue = year.value;
       var yearText = year.options[year.selectedIndex].text;
 
-      console.log(yearText)
+      console.log(catValue)
 
-      fetchData(yearText)
+      fetchData(catValue, yearText, ascDescValue)
 
     }
 
-    function fetchData(year) {
+    function fetchData(category, year, way_value) {
 
-      const responsePromise = fetch("/player_table?year=" + year, {
+      const responsePromise = fetch("/player_table?category=" + category +'&year=' + year +'&way=' + way_value, {
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8"

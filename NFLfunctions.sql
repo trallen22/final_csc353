@@ -279,18 +279,44 @@ SELECT player_name, SUM(yards_gained) AS total_yards, SUM(touchdown) AS TDs, COU
 
 
 
+-- DROP PROCEDURE IF EXISTS filterPlayerStats;
+-- DELIMITER //
+-- CREATE PROCEDURE filterPlayerStats(season_year INT)
+-- BEGIN
+	-- SELECT player_name, SUM(yards_gained) AS total_yards, 
+		-- SUM(touchdown) AS TDs, COUNT(interceptor_id) AS INTs, SUM(reception) AS receptions
+		-- FROM (SELECT * 
+				 -- FROM combinedStats
+				-- WHERE season = season_year) as filtered_stats
+		-- GROUP BY player_name;
+	
+-- END
+-- //
+-- DELIMITER ;
+
 DROP PROCEDURE IF EXISTS filterPlayerStats;
 DELIMITER //
-CREATE PROCEDURE filterPlayerStats(season_year INT)
+CREATE PROCEDURE filterPlayerStats(season_year INT, order_column VARCHAR(20), sort_way VARCHAR(10))
 BEGIN
-	SELECT player_name, SUM(yards_gained) AS total_yards, 
-		SUM(touchdown) AS TDs, COUNT(interceptor_id) AS INTs, SUM(reception) AS receptions
-		FROM (SELECT * 
-				FROM combinedStats
-				WHERE season = season_year) as filtered_stats
-		GROUP BY player_name;
-	
+    SET @query = CONCAT('
+        SELECT player_name, 
+               SUM(yards_gained) AS total_yards, 
+               SUM(touchdown) AS TDs, 
+               COUNT(interceptor_id) AS INTs, 
+               SUM(reception) AS receptions
+        FROM (
+            SELECT * 
+            FROM combinedStats
+            WHERE season = ', season_year, '
+        ) AS filtered_stats
+        GROUP BY player_name
+        ORDER BY ', order_column, ' ', sort_way);
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 END
 //
 DELIMITER ;
+
 

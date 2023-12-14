@@ -98,10 +98,15 @@ app.get('/rand_rec', function(request, response){
 app.get('/player_table', function(request, response){
     // If we have fields available
     // console.log(request.query["field1"]);
-    // let queryParams = []
-
+    console.log('we got here')
+    let queryParams = []
+    let category = request.query["category"] 
     let year = request.query["year"]
-    db.queryCallback(year, 'playerTable',(results) => {
+    let way = request.query["way"]
+    queryParams.push(year)
+    queryParams.push(category)
+    queryParams.push(way)
+    db.queryCallback(queryParams, 'playerTable',(results) => {
         response.json(results)
     })
 });
