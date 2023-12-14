@@ -281,15 +281,14 @@ SELECT player_name, SUM(yards_gained) AS total_yards, SUM(touchdown) AS TDs, COU
 
 DROP PROCEDURE IF EXISTS filterPlayerStats;
 DELIMITER //
-CREATE PROCEDURE filterPlayerStats(season_year INT, category VARCHAR(15))
+CREATE PROCEDURE filterPlayerStats(season_year INT)
 BEGIN
 	SELECT player_name, SUM(yards_gained) AS total_yards, 
-	SUM(touchdown) AS TDs, COUNT(interceptor_id) AS INTs, SUM(reception) AS receptions
+		SUM(touchdown) AS TDs, COUNT(interceptor_id) AS INTs, SUM(reception) AS receptions
 		FROM (SELECT * 
 				FROM combinedStats
 				WHERE season = season_year) as filtered_stats
-		GROUP BY player_name
-		ORDER BY category DESC;
+		GROUP BY player_name;
 	
 END
 //
