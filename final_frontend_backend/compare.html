@@ -89,9 +89,6 @@
       var player1 = document.getElementById('player-1-input').value
       var player2 = document.getElementById('player-2-input').value
 
-      console.log(player1, 'input')
-      console.log(player2, 'input')
-
       const responsePromise = fetch("/search?player1=" + player1 +'&player2=' + player2, {
         method: "GET",
         headers: {
@@ -132,7 +129,6 @@
           element.style.color = 'black';
         }
       };
-      console.log(results)
       player_2.innerHTML = results[0][0].player_name;
       yards_2.innerHTML = 'Yards: ' + results[0][0].total_yards;
       tds_2.innerHTML = 'TDs: ' + results[0][0].TDs;
@@ -149,7 +145,7 @@
       setColor(results[0][0].total_yards, results[0][1].total_yards, yards_2);
       setColor(results[0][0].TDs, results[0][1].TDs, tds_2);
       setColor(results[0][0].receptions, results[0][1].receptions, receptions_2);
-      setColor(results[0][1].interceptor, results[0][0].interceptor, ints_2);
+      setColor(results[0][1].turnovers, results[0][0].turnovers, ints_2);
       setColor(results[0][1].total_yards, results[0][0].total_yards, yards_1);
       setColor(results[0][1].TDs, results[0][0].TDs, tds_1);
       setColor(results[0][1].receptions, results[0][0].receptions, receptions_1);

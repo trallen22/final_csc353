@@ -18,8 +18,6 @@ function queryCallback(queryParams, queryType, callback) {
 
 	if(queryParams != ""){
 
-		console.log('here')
-
 		if(queryType == 'playerTable'){
 			if(queryParams[0] == 'Career'){
 
@@ -38,9 +36,7 @@ function queryCallback(queryParams, queryType, callback) {
 			}
 
 		}else if(queryType == 'teamTable'){
-			console.log('hello', queryParams[0])
 			if(!(queryParams[0] == 'Total')){
-				console.log('total query')
 				connection.query('CALL filterTeamStats(?, ?, ?)', [queryParams[0], queryParams[1], queryParams[2]], (error, results, fields) => {
 					if (error) throw error;
 	
@@ -56,8 +52,6 @@ function queryCallback(queryParams, queryType, callback) {
 			}
 
 		}else if(queryType == 'search'){
-
-			console.log(queryParams)
 			
 			connection.query('CALL searchPlayerStats(?, ?)', [queryParams[1], queryParams[0]], (error, results, fields) => {
 				if (error) throw error;

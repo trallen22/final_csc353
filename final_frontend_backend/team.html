@@ -134,8 +134,6 @@
       var yearValue = year.value;
       var yearText = year.options[year.selectedIndex].text;
 
-      console.log(catValue)
-
       fetchData(catValue, yearText, ascDescValue)
 
     }
@@ -170,9 +168,6 @@
       let startIndex = (currentPage - 1) * itemsPerPage;
       let endIndex = currentPage * itemsPerPage;
       let slicedData = results.slice(startIndex, endIndex);
-
-
-      console.log(slicedData)
       slicedData[0].forEach(element => {
           let team_row = table.insertRow(-1)
           let team = team_row.insertCell(0)

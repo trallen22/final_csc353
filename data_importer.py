@@ -15,7 +15,7 @@ from tqdm import tqdm
 HOST = 'localhost'
 USER = 'root'
 FILENAME = "NFL Play by Play 2009-2016 (v3).csv"
-# PASSWORD = '123456'
+PASSWORD = '123456'
 
 # these sets are used to check if values have already been inserted into the table 
 gameSet = set()
@@ -66,7 +66,7 @@ def playerIDbyName(playerName):
 os.system(f'mysql NFLdata < "{os.getcwd()}/NFLschema.sql"')
 
 try: 
-	connection = mysql.connector.connect(host=HOST, user=USER, database="NFLdata") 
+	connection = mysql.connector.connect(host=HOST, user=USER, database="NFLdata", password=PASSWORD) 
 except Exception as e:
 	print(f'error: {e}')
 	sys.exit()
@@ -97,40 +97,17 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 		# play table 
 		curPlayTuple = (0, # curPlayID keeps track of this AUTO_INCREMENT 
 						row['GameID'], 
-						row['Drive'], 
-						row['qtr'], 
-						row['down'] if row['down'] != 'NA' else None, 
-						row['time'], 
-						row['SideofField'], 
-						row['yrdln'] if row['yrdln'] != 'NA' else None, 
-						row['yrdline100'] if row['yrdln'] != 'NA' else None, 
-						row['ydstogo'], 
 						row['ydsnet'], 
-						row['GoalToGo'] if row['GoalToGo'] != 'NA' else None, 
-						row['FirstDown'] if row['FirstDown'] != 'NA' else None, 
 						curPosTeam if curPosTeam != 'JAC' else 'JAX', 
 						row['DefensiveTeam'] if row['posteam'] != 'JAC' else 'JAX', 
 						row['Yards.Gained'], 
 						row['Touchdown'], 
 						row['TwoPointConv'] if row['TwoPointConv'] != 'NA' else None, 
-						row['DefTwoPoint'] if row['DefTwoPoint'] != 'NA' else None, 
-						row['Safety'], 
 						row['PlayType'], 
-						row['Tackler1'], 
-						row['Tackler2'], 
 						row['RecFumbTeam'],
 						1 if row['RecFumbTeam'] != 'NA' else 0,
-						row['RecFumbPlayer'],
-						row['Sack'], 
-						row['Accepted.Penalty'], 
-						row['PenalizedTeam'],
-						row['PenaltyType'], 
-						row['PenalizedPlayer'], 
-						row['Penalty.Yards'], 
-						row['PosTeamScore'] if row['PosTeamScore'] != 'NA' else None, 
-						row['DefTeamScore'] if row['DefTeamScore'] != 'NA' else None, 
+						row['RecFumbPlayer'])
 						# can change the number of decimal places for win_prob
-						round(float(row['Win_Prob']), 4) if row['Win_Prob'] != 'NA' else None) 
 		sqlInsert('play', curPlayTuple)
 		
 		# run table 
@@ -156,58 +133,10 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 			curPassTuple = (curPlayID, 
 							passerPlayerID, 
 							1 if row['PassOutcome'] == "completion" else 0, 
-							row['AirYards'], 
 							receiverPlayerID, 
 							row['Reception'], 
-							row['YardsAfterCatch'], 
-							row['QBHit'], 
-							row['PassLocation'], 
 							interceptorPlayerID)
 			sqlInsert('pass', curPassTuple)
-
-		# special_teams table 
-		stPlay = 1 # indicator if st play; will set to false if none are found 
-		# default values are None since only one st play can occur at a time
-		patResult = None 
-		fgResult = None 
-		puntResult = None 
-		returnResult = None # need to remove 
-		fgDistance = None
-		returnerID = None
-		# Might want to incorporate 'PlayType'
-		# check what kind of st play 
-		if row['ExPointResult'] != 'NA': 
-			patResult = row['ExPointResult']
-		elif row['FieldGoalResult'] != 'NA': 
-			if row['FieldGoalDistance'] != 'NA':
-				fgDistance = row['FieldGoalDistance']
-			fgResult = row['FieldGoalResult']
-		elif row['PuntResult'] != 'NA':
-			puntResult = row['PuntResult']
-		# ReturnResult and Returner include int/fumble recoveries (not st)	
-		# return result shouldn't be here (at least not only in st table)
-		# schema needs to be adjusted accordingly 
-		elif row['ReturnResult'] != 'NA':
-			if row['Returner'] != 'NA': 
-				returnerID, playerIDmap, playerIDcounter = playerIDbyName(row['Returner'])
-			returnResult = row['ReturnResult'] 
-		else: 
-			stPlay = 0 # not a st play so set to false 
-		# fill st table if determined as st play 
-		if (stPlay):
-			if row['BlockingPlayer'] != 'NA':
-				blockingPlayerID, playerIDmap, playerIDcounter = playerIDbyName(row['BlockingPlayer'])
-			else: 
-				blockingPlayerID = None
-			curStTuple = (curPlayID, 
-							puntResult, 
-							returnResult, 
-							returnerID, 
-							blockingPlayerID, 
-							fgResult, 
-							fgDistance, 
-							patResult)
-			sqlInsert('special_teams', curStTuple)
 
 		pbar.update(1)
 

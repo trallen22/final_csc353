@@ -367,8 +367,6 @@
         trec5.innerText = results[0][4]['team'] + ': ' + results[0][2]['total_yards'] + ' Total Yards & ' + results[0][4]['touchdowns'] + ' TDs'
       }else if(play_type == 'randPass'){
 
-        console.log('here')
-
         let list = document.getElementById("random-pass")
         let randPass1 = document.getElementById("name-pass")
         let randPass2 = document.getElementById("stat-1-pass")
@@ -409,18 +407,6 @@
         randRec4.innerText = 'Yards: ' + results[0][0]['total_yards']
         randRec5.innerText = 'TDs: ' + results[0][0]['touchdowns']
         }
-
-
-
-
-      // results.forEach(element => {
-      //   let player = document.createElement("li")
-
-      //   player.innerText = results[0]
-      //   console.log(results[0])
-
-      //   list.appendChild(student)
-      // })
     }
 
     fetchData('playerPass')
