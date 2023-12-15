@@ -86,8 +86,8 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 		if not row['GameID'] in gameSet:
 			curGameTuple = (row['GameID'], 
 							row['Date'], 
-							row['HomeTeam'], 
-							row['AwayTeam'], 
+							row['HomeTeam'] if not 'JAC' else 'JAX', 
+							row['AwayTeam'] if not 'JAC' else 'JAX', 
 							row['Season'])
 			sqlInsert('game', curGameTuple)
 			gameSet.add(row['GameID'])
