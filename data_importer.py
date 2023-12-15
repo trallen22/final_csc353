@@ -73,15 +73,17 @@ except Exception as e:
 
 cursor = connection.cursor()
 
-i = 0 # used for testing 
 with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 	curCsv = csv.DictReader(curFile)
 	pbar = tqdm(desc='GOING PLAY BY PLAY', total=362447) # progress bar to total number of rows in the file 
 	for row in curCsv:
-		i += 1 # used for testing 
+
+		curPosTeam = row['posteam']
+		if curPosTeam == "":
+			pbar.update(1)
+			continue
 
 		curPlayID += 1
-
 		# game table 
 		if not row['GameID'] in gameSet:
 			curGameTuple = (row['GameID'], 
@@ -106,7 +108,7 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 						row['ydsnet'], 
 						row['GoalToGo'] if row['GoalToGo'] != 'NA' else None, 
 						row['FirstDown'] if row['FirstDown'] != 'NA' else None, 
-						row['posteam'] if row['posteam'] != 'JAC' else 'JAX', 
+						curPosTeam if curPosTeam != 'JAC' else 'JAX', 
 						row['DefensiveTeam'] if row['posteam'] != 'JAC' else 'JAX', 
 						row['Yards.Gained'], 
 						row['Touchdown'], 
@@ -205,10 +207,6 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 							fgDistance, 
 							patResult)
 			sqlInsert('special_teams', curStTuple)
-
-		# # used for testing 
-		# if i == 1000:
-		# 	break 
 
 		pbar.update(1)
 
