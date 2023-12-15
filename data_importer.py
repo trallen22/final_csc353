@@ -15,7 +15,7 @@ from tqdm import tqdm
 HOST = 'localhost'
 USER = 'root'
 FILENAME = "NFL Play by Play 2009-2016 (v3).csv"
-PASSWORD = '123456'
+# PASSWORD = '123456'
 
 # these sets are used to check if values have already been inserted into the table 
 gameSet = set()
@@ -66,7 +66,7 @@ def playerIDbyName(playerName):
 os.system(f'mysql NFLdata < "{os.getcwd()}/NFLschema.sql"')
 
 try: 
-	connection = mysql.connector.connect(host=HOST, user=USER, password=PASSWORD, database="NFLdata") 
+	connection = mysql.connector.connect(host=HOST, user=USER, database="NFLdata") 
 except Exception as e:
 	print(f'error: {e}')
 	sys.exit()
@@ -86,8 +86,8 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 		if not row['GameID'] in gameSet:
 			curGameTuple = (row['GameID'], 
 							row['Date'], 
-							row['HomeTeam'], 
-							row['AwayTeam'], 
+							row['HomeTeam'] if row['HomeTeam'] != 'JAC' else 'JAX', 
+							row['AwayTeam'] if row['AwayTeam'] != 'JAC' else 'JAX', 
 							row['Season'])
 			sqlInsert('game', curGameTuple)
 			gameSet.add(row['GameID'])
@@ -106,8 +106,8 @@ with open(FILENAME, 'r', encoding='utf-8-sig') as curFile:
 						row['ydsnet'], 
 						row['GoalToGo'] if row['GoalToGo'] != 'NA' else None, 
 						row['FirstDown'] if row['FirstDown'] != 'NA' else None, 
-						row['posteam'], 
-						row['DefensiveTeam'], 
+						row['posteam'] if row['posteam'] != 'JAC' else 'JAX', 
+						row['DefensiveTeam'] if row['posteam'] != 'JAC' else 'JAX', 
 						row['Yards.Gained'], 
 						row['Touchdown'], 
 						row['TwoPointConv'] if row['TwoPointConv'] != 'NA' else None, 
